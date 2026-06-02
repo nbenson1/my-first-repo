@@ -58,7 +58,7 @@ export default function Dashboard() {
             <h2 className="text-white font-semibold">Daily Report – June 2, 2026</h2>
             <p className="text-[#8ba8c8] text-sm mt-0.5">
               <span className="text-[#4a9eff] font-semibold">12 new jobs</span> found across 7 companies ·{' '}
-              Top match: <span className="text-emerald-400 font-semibold">Collins Aerospace (96% fit)</span>
+              Top match: <span className="text-emerald-400 font-semibold">Collins Aerospace Avionics Manufacturing (98% fit)</span>
             </p>
           </div>
         </div>

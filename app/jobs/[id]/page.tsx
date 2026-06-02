@@ -15,25 +15,28 @@ import { JobStatus } from '@/types';
 const STATUSES: JobStatus[] = ['New', 'Interested', 'Applied', 'Interviewing', 'Rejected'];
 
 const MOCK_RESUME_BULLETS = [
-  'Designed and analyzed avionics system interfaces using structured requirements documentation and GD&T-compliant technical drawings, reducing design review cycle time by 15%.',
-  'Developed MATLAB scripts to automate data analysis pipelines for manufacturing quality metrics, processing 500+ inspection records per shift.',
-  'Led 5S Lean initiative on avionics assembly floor, resulting in a 20% reduction in tool retrieval time and a cleaner, auditable workspace.',
-  'Performed NDE inspections on composite airframe assemblies, identifying and documenting 12 defects prior to final assembly — zero escapes to customer.',
-  'Collaborated with cross-functional NPI team to transition 3 new avionics assemblies from prototype to production, creating work instructions and process FMEAs.',
+  'Managed design and installation of manufacturing fixtures and safety equipment at Collins Aerospace, ensuring GD&T compliance between design intent and shop-floor execution in a regulated avionics environment.',
+  'Led rollout of smart torque tooling system across avionics production line, improving process standardization, assembly traceability, and quality check repeatability.',
+  'Designed and modified 3D production layouts in SOLIDWORKS to support tooling, fixtures, and machine guarding — directly reducing setup time and improving floor ergonomics.',
+  'Performed ultrasonic NDE inspection on fiberglass/epoxy composite laminates (ASTM D7264), evaluating fiber damage, resin starvation, and void defects with quantitative flexural data.',
+  'Collaborated with engineering, manufacturing, and quality teams to document and improve avionics manufacturing processes — cross-functional experience applicable to systems integration and NPI roles.',
 ];
 
 const MOCK_COVER_LETTER = `Dear Hiring Team,
 
-I am writing to express my strong interest in this role at your organization. As an Aerospace Engineering student graduating in December 2026 from Iowa State University, I am eager to apply my academic background and hands-on manufacturing experience to contribute to your team.
+I am writing to express my strong interest in this role. As an Aerospace Engineering student at Iowa State University graduating in December 2026 — with a Minor in Nondestructive Evaluation — I bring hands-on experience that directly maps to your requirements.
 
-During my time in academia and internships, I developed expertise in systems engineering, avionics manufacturing, and technical documentation. I have direct experience with MATLAB, Python, SolidWorks, GD&T, and Lean/5S methodologies — all of which align closely with the requirements of this role.
+During my 8-month Industrial Engineer Co-op at Collins Aerospace (Bellevue, Iowa), I worked alongside engineering, manufacturing, and quality teams to improve avionics manufacturing processes in a regulated aerospace environment. I designed and modified SOLIDWORKS models for tooling and production layouts, managed fixture installations, led the rollout of a smart torque tooling system, and applied GD&T daily to verify manufacturability and interface fit.
 
-I am particularly drawn to your focus on [specific program/technology], and I believe my background in avionics manufacturing and NDE positions me well to add immediate value to your team.
+Beyond Collins, I've fabricated fiberglass/epoxy composite laminates and performed ultrasonic NDE inspection per ASTM D7264 — giving me direct hands-on experience with inspection methods relevant to this role. My NDE Minor provides formal academic grounding in inspection theory that complements this practical background.
 
-I would welcome the opportunity to discuss how my skills and enthusiasm align with your team's needs. Thank you for your consideration.
+I am drawn to [Company] because [specific program/team focus] aligns closely with the manufacturing, quality, and systems-level work I've done. I would welcome the chance to discuss how my background fits your team's needs.
+
+Thank you for your time and consideration.
 
 Sincerely,
-Nolan Benson`;
+Nolan A. Benson
+(815)-761-3406 | nbenson1@iastate.edu`;
 
 export default function JobDetailPage() {
   const { id } = useParams();
