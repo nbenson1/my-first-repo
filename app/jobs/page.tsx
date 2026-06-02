@@ -17,8 +17,9 @@ export default function JobsPage() {
   // Live search state
   const [liveJobs, setLiveJobs] = useState<Job[]>([]);
   const [searching, setSearching] = useState(false);
+  const [searchProgress, setSearchProgress] = useState('');
   const [searchError, setSearchError] = useState('');
-  const [selectedPreset, setSelectedPreset] = useState(0);
+  const [selectedPresets, setSelectedPresets] = useState<Set<number>>(new Set());
   const [customQuery, setCustomQuery] = useState('');
   const [lastSearched, setLastSearched] = useState('');
   const [showLiveSearch, setShowLiveSearch] = useState(true);
@@ -68,26 +69,55 @@ export default function JobsPage() {
 
   const activeFilters = [filterStatus, filterRemote, filterCompany].filter(Boolean).length + (minFit > 0 ? 1 : 0);
 
+  const togglePreset = (i: number) => {
+    setSelectedPresets(prev => {
+      const next = new Set(prev);
+      next.has(i) ? next.delete(i) : next.add(i);
+      return next;
+    });
+    setCustomQuery('');
+  };
+
   const handleSearch = async () => {
-    const query = customQuery.trim() || SEARCH_PRESETS[selectedPreset].query;
+    const queries = customQuery.trim()
+      ? [customQuery.trim()]
+      : selectedPresets.size > 0
+      ? [...selectedPresets].map(i => SEARCH_PRESETS[i].query)
+      : [SEARCH_PRESETS[0].query];
+
     setSearching(true);
     setSearchError('');
-    setLastSearched(query);
+    setLastSearched(queries.length === 1 ? queries[0] : `${queries.length} searches`);
 
-    const { jobs: results, error } = await fetchLiveJobs(query);
+    let allResults: Job[] = [];
+    for (let i = 0; i < queries.length; i++) {
+      setSearchProgress(`Searching ${i + 1} of ${queries.length}...`);
+      const { jobs: results, error } = await fetchLiveJobs(queries[i]);
+      if (error) {
+        setSearching(false);
+        setSearchProgress('');
+        setSearchError(error);
+        return;
+      }
+      allResults = [...allResults, ...results];
+    }
 
     setSearching(false);
-    if (error) {
-      setSearchError(error);
-    } else {
-      setLiveJobs(prev => {
-        // Merge new results, keep previous ones not in this batch
-        const newIds = new Set(results.map(j => j.id));
-        const kept = prev.filter(j => !newIds.has(j.id));
-        return [...kept, ...results];
+    setSearchProgress('');
+    setLiveJobs(prev => {
+      const newIds = new Set(allResults.map(j => j.id));
+      const kept = prev.filter(j => !newIds.has(j.id));
+      // Deduplicate within new results by company+title
+      const seen = new Set<string>();
+      const deduped = allResults.filter(j => {
+        const key = `${j.company}|${j.title}`.toLowerCase();
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
       });
-      setActiveTab('live');
-    }
+      return [...kept, ...deduped];
+    });
+    setActiveTab('live');
   };
 
   const handleSaveLiveJob = (id: string) => {
@@ -139,18 +169,34 @@ export default function JobsPage() {
             <div className="pt-4 space-y-3">
               {/* Preset queries */}
               <div>
-                <label className="text-[#8ba8c8] text-xs font-medium block mb-2">Quick search presets (built from your profile):</label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-[#8ba8c8] text-xs font-medium">
+                    Select one or more presets — then click Search:
+                    {selectedPresets.size > 0 && (
+                      <span className="ml-2 text-[#4a9eff]">{selectedPresets.size} selected</span>
+                    )}
+                  </label>
+                  {selectedPresets.size > 0 && (
+                    <button
+                      onClick={() => setSelectedPresets(new Set())}
+                      className="text-xs text-[#4a7aab] hover:text-white transition-colors"
+                    >
+                      Clear selection
+                    </button>
+                  )}
+                </div>
                 <div className="flex flex-wrap gap-2">
                   {SEARCH_PRESETS.map((p, i) => (
                     <button
                       key={i}
-                      onClick={() => { setSelectedPreset(i); setCustomQuery(''); }}
+                      onClick={() => togglePreset(i)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
-                        selectedPreset === i && !customQuery
+                        selectedPresets.has(i) && !customQuery
                           ? 'bg-[#2563eb]/20 border-[#2563eb] text-[#4a9eff]'
                           : 'bg-[#060f1e] border-[#1e3a5f] text-[#8ba8c8] hover:border-[#2563eb]/50 hover:text-white'
                       }`}
                     >
+                      {selectedPresets.has(i) && !customQuery && <span className="mr-1">✓</span>}
                       {p.label}
                     </button>
                   ))}
@@ -173,9 +219,9 @@ export default function JobsPage() {
                   className="flex items-center gap-2 px-5 py-2.5 bg-[#2563eb] hover:bg-[#1d4ed8] disabled:opacity-60 text-white rounded-lg text-sm font-semibold transition-colors"
                 >
                   {searching ? (
-                    <><Loader2 size={15} className="animate-spin" /> Searching...</>
+                    <><Loader2 size={15} className="animate-spin" /> {searchProgress || 'Searching...'}</>
                   ) : (
-                    <><Zap size={15} /> Search Live Jobs</>
+                    <><Zap size={15} /> Search Live Jobs{selectedPresets.size > 1 ? ` (${selectedPresets.size})` : ''}</>
                   )}
                 </button>
               </div>
