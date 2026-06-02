@@ -126,12 +126,20 @@ export default function JobDetailPage() {
             {job.saved ? <BookmarkCheck size={15} /> : <Bookmark size={15} />}
             {job.saved ? 'Saved' : 'Save Job'}
           </button>
-          <a
-            href={job.url}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#2563eb] hover:bg-[#1d4ed8] text-white rounded-lg text-sm font-medium transition-colors"
-          >
-            <ExternalLink size={14} /> View Posting
-          </a>
+          {job.url && job.url !== '#' ? (
+            <a
+              href={job.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#2563eb] hover:bg-[#1d4ed8] text-white rounded-lg text-sm font-medium transition-colors"
+            >
+              <ExternalLink size={14} /> Apply Now
+            </a>
+          ) : (
+            <span className="flex items-center gap-1.5 px-3 py-1.5 bg-[#1e3a5f] text-[#4a7aab] rounded-lg text-sm cursor-default">
+              <ExternalLink size={14} /> No link available
+            </span>
+          )}
         </div>
       </div>
 
