@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { Job, UserProfile } from '@/types';
-import { mockJobs, defaultUserProfile } from './data';
+import { defaultUserProfile } from './data';
 
-const JOBS_KEY = 'jobfit_jobs';
+const JOBS_KEY = 'jobfit_saved_jobs_v2';
 const PROFILE_KEY = 'jobfit_profile';
 
 export function useJobs() {
@@ -12,7 +12,7 @@ export function useJobs() {
 
   useEffect(() => {
     const stored = localStorage.getItem(JOBS_KEY);
-    setJobs(stored ? JSON.parse(stored) : mockJobs);
+    setJobs(stored ? JSON.parse(stored) : []);
   }, []);
 
   const updateJob = (id: string, updates: Partial<Job>) => {
@@ -23,11 +23,21 @@ export function useJobs() {
     });
   };
 
+  // Persist a brand-new job (e.g. from live search) into saved list
+  const addJob = (job: Job) => {
+    setJobs(prev => {
+      if (prev.find(j => j.id === job.id)) return prev;
+      const updated = [...prev, { ...job, saved: true }];
+      localStorage.setItem(JOBS_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  };
+
   const saveJob = (id: string) => updateJob(id, { saved: true });
   const unsaveJob = (id: string) => updateJob(id, { saved: false });
   const updateStatus = (id: string, status: Job['status']) => updateJob(id, { status });
 
-  return { jobs, updateJob, saveJob, unsaveJob, updateStatus };
+  return { jobs, updateJob, addJob, saveJob, unsaveJob, updateStatus };
 }
 
 export function useProfile() {

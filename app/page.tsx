@@ -13,7 +13,7 @@ import PageHeader from '@/components/PageHeader';
 import DailyTopJobs from '@/components/DailyTopJobs';
 
 export default function Dashboard() {
-  const { jobs, saveJob, unsaveJob } = useJobs();
+  const { jobs, addJob, unsaveJob } = useJobs();
 
   const stats = useMemo(() => ({
     total: jobs.length,
@@ -72,7 +72,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* Daily Top 10 — takes up 2/3 width */}
         <div className="xl:col-span-2">
-          <DailyTopJobs onSave={saveJob} onUnsave={unsaveJob} savedIds={savedIds} />
+          <DailyTopJobs onSave={addJob} onUnsave={unsaveJob} savedIds={savedIds} />
         </div>
 
         {/* Right sidebar */}

@@ -24,7 +24,7 @@ interface CacheEntry {
 }
 
 interface Props {
-  onSave: (id: string) => void;
+  onSave: (job: Job) => void;
   onUnsave: (id: string) => void;
   savedIds: Set<string>;
 }
@@ -201,7 +201,7 @@ export default function DailyTopJobs({ onSave, onUnsave, savedIds }: Props) {
 
                 {/* Save button */}
                 <button
-                  onClick={() => isSaved ? onUnsave(job.id) : onSave(job.id)}
+                  onClick={() => isSaved ? onUnsave(job.id) : onSave(job)}
                   className="text-[#4a7aab] hover:text-[#4a9eff] transition-colors flex-shrink-0"
                   title={isSaved ? 'Unsave' : 'Save job'}
                 >
