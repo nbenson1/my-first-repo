@@ -12,9 +12,11 @@ interface Props {
   onUnsave?: (id: string) => void;
 }
 
+const hasRealUrl = (url: string) => url && url !== '#' && url.startsWith('http');
+
 export default function JobCard({ job, onSave, onUnsave }: Props) {
   return (
-    <div className="bg-[#0d1f3c] border border-[#1e3a5f] rounded-xl p-5 hover:border-[#2563eb] transition-all hover:shadow-lg hover:shadow-blue-900/20 group">
+    <div className="bg-[#0d1f3c] border border-[#1e3a5f] rounded-xl p-5 hover:border-[#2563eb] transition-all hover:shadow-lg hover:shadow-blue-900/20">
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex-1 min-w-0">
           <Link
@@ -68,16 +70,26 @@ export default function JobCard({ job, onSave, onUnsave }: Props) {
 
       <div className="flex items-center justify-between">
         <StatusBadge status={job.status} />
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <span className="text-[#4a7aab] text-xs">
             {new Date(job.postedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
           </span>
           <Link
             href={`/jobs/${job.id}`}
-            className="flex items-center gap-1 text-xs text-[#4a9eff] hover:text-white transition-colors font-medium"
+            className="flex items-center gap-1 text-xs text-[#4a7aab] hover:text-[#4a9eff] transition-colors font-medium"
           >
-            Details <ExternalLink size={12} />
+            Details
           </Link>
+          {hasRealUrl(job.url) && (
+            <a
+              href={job.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-xs font-semibold text-[#4a9eff] hover:text-white transition-colors border border-[#2563eb]/40 hover:border-[#2563eb] px-2 py-0.5 rounded"
+            >
+              Apply <ExternalLink size={11} />
+            </a>
+          )}
         </div>
       </div>
     </div>
