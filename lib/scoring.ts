@@ -15,13 +15,21 @@ const TARGET_COMPANIES = [
   'collins', 'boeing', 'northrop', 'lockheed', 'ge aerospace', 'ge aviation',
   'honeywell', 'garmin', 'textron', 'raytheon', 'l3harris', 'spirit aerosystems',
   'parker hannifin', 'moog', 'ducommun', 'heico', 'transdigm',
+  'curtiss-wright', 'kaman', 'triumph group', 'woodward', 'crane aerospace',
+  'safran', 'united technologies', 'pratt & whitney', 'hamilton sundstrand',
 ];
 
 const TARGET_TITLES = [
+  // Aerospace-specific
   'manufacturing engineer', 'industrial engineer', 'npi', 'new product introduction',
   'systems engineer', 'quality engineer', 'nde engineer', 'ndt engineer',
   'avionics engineer', 'mechanical engineer', 'test engineer',
   'aerospace engineer', 'process engineer', 'design engineer',
+  // Manufacturing & Industrial (broader)
+  'production engineer', 'operations engineer', 'continuous improvement',
+  'lean engineer', 'manufacturing systems', 'tooling engineer',
+  'quality assurance', 'reliability engineer', 'sustaining engineer',
+  'manufacturing technologist', 'product engineer',
 ];
 
 // Map: keyword to look for in job text → reason string shown to user
@@ -43,10 +51,23 @@ const SKILL_SIGNALS: [string, string][] = [
   ['tooling', 'Tooling & fixture design/installation experience from Collins co-op matches'],
   ['fixture', 'Fixture design and installation experience from Collins co-op matches'],
   ['process improvement', 'Process improvement experience (smart torque rollout at Collins) matches'],
+  ['continuous improvement', 'Continuous improvement experience from Collins co-op matches requirement'],
+  ['kaizen', 'Lean/Kaizen background from Collins co-op manufacturing environment matches'],
   ['quality', 'Quality mindset developed in regulated AS9100 aerospace environment'],
   ['inspection', 'Inspection experience from NDE Minor and composite project matches'],
   ['aerospace', 'Aerospace Engineering degree and real aerospace industry experience match'],
+  ['defense', 'Aerospace Engineering degree applicable to defense manufacturing programs'],
   ['structures', 'Structural load path analysis experience (senior design project) matches'],
+  ['industrial engineer', 'Direct match — Collins co-op title was Industrial Engineer'],
+  ['time study', 'Industrial engineering methods applicable from process improvement work at Collins'],
+  ['work instruction', 'Work instruction authoring experience from Collins co-op matches'],
+  ['standard work', 'Lean/standard work experience from Collins manufacturing co-op matches'],
+  ['capacity planning', 'Manufacturing systems background from Collins co-op applies here'],
+  ['production', 'Production floor experience from 8-month Collins avionics manufacturing co-op'],
+  ['assembly', 'Assembly process experience from Collins avionics manufacturing co-op matches'],
+  ['traceability', 'Traceability experience — led smart torque tooling rollout with traceability focus'],
+  ['process documentation', 'Process documentation experience from Collins regulated aerospace environment'],
+  ['ergonomic', 'Shop-floor ergonomics and layout design from Collins SOLIDWORKS production layouts'],
 ];
 
 const GAP_SIGNALS: [string, string][] = [
@@ -113,6 +134,23 @@ export function scoreJob(
   if (companyMatch) {
     score += 10;
     matchReasons.push(`${company} is in your target company list`);
+  }
+
+  // Industry context bonus — manufacturing/industrial roles in aerospace/defense get a boost
+  // even if the job title doesn't say "aerospace"
+  const isAeroDefenseContext =
+    fullText.includes('aerospace') || fullText.includes('defense') ||
+    fullText.includes('aviation') || fullText.includes('avionics') ||
+    fullText.includes('aircraft') || fullText.includes('military') ||
+    fullText.includes('missile') || fullText.includes('satellite') ||
+    fullText.includes('propulsion') || fullText.includes('jet engine');
+  const isMfgIndustrialTitle =
+    titleLower.includes('manufacturing') || titleLower.includes('industrial') ||
+    titleLower.includes('process') || titleLower.includes('production') ||
+    titleLower.includes('lean') || titleLower.includes('operations');
+  if (isMfgIndustrialTitle && isAeroDefenseContext && matchReasons.length < 7) {
+    score += 5;
+    matchReasons.push('Manufacturing/industrial role in aerospace or defense industry — direct background fit');
   }
 
   // Skills match — 0 to 35 pts, max 5 reasons

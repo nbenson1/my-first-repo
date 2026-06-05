@@ -10,12 +10,14 @@ import FitScoreBadge from './FitScoreBadge';
 const CACHE_KEY = 'jobfit_daily_top10';
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
-// Queries run every daily refresh — focused on Nolan's best-fit roles
+// Queries run every daily refresh — aerospace + manufacturing/industrial engineering
 const DAILY_QUERIES = [
-  'aerospace manufacturing engineer entry level Iowa Illinois',
-  'NDE quality engineer aerospace entry level',
-  'systems engineer aerospace new grad entry level',
-  'avionics engineer manufacturing entry level',
+  'manufacturing engineer aerospace defense entry level Iowa Illinois Minnesota',
+  'industrial engineer aerospace defense entry level new grad',
+  'NDE NDT quality engineer aerospace entry level',
+  'avionics manufacturing engineer entry level',
+  'NPI process engineer aerospace manufacturing entry level',
+  'lean continuous improvement engineer aerospace defense entry level',
 ];
 
 interface CacheEntry {

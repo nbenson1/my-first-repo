@@ -3,16 +3,24 @@ import { scoreJob } from './scoring';
 
 // Preset search queries tailored to Nolan's profile
 export const SEARCH_PRESETS = [
-  { label: 'Avionics / Manufacturing — Iowa & IL', query: 'avionics manufacturing engineer entry level Iowa Illinois' },
+  // Aerospace-focused
+  { label: 'Avionics Mfg — Iowa & IL', query: 'avionics manufacturing engineer entry level Iowa Illinois' },
+  { label: 'NDE / Quality — Aerospace', query: 'NDE NDT quality engineer aerospace entry level' },
   { label: 'Systems Engineer — Midwest', query: 'systems engineer aerospace entry level Iowa Illinois Minnesota' },
-  { label: 'NDE / Quality Engineer', query: 'NDE NDT quality engineer aerospace entry level' },
-  { label: 'Manufacturing / NPI — All Locations', query: 'manufacturing engineer NPI new product introduction aerospace entry level' },
-  { label: 'Collins Aerospace Jobs', query: 'Collins Aerospace engineer entry level' },
-  { label: 'GE Aerospace Jobs', query: 'GE Aerospace engineer entry level' },
-  { label: 'Boeing New Grad', query: 'Boeing aerospace engineer new graduate entry level' },
-  { label: 'Mechanical / Design Engineer — Midwest', query: 'mechanical design engineer aerospace entry level Iowa Illinois Minnesota' },
   { label: 'Test Engineer — Aerospace', query: 'test engineer aerospace entry level new grad' },
-  { label: 'Remote Aerospace Engineering', query: 'aerospace engineer remote entry level new grad' },
+  { label: 'Collins Aerospace', query: 'Collins Aerospace engineer entry level' },
+  { label: 'GE Aerospace', query: 'GE Aerospace engineer entry level' },
+  { label: 'Boeing New Grad', query: 'Boeing engineer new graduate entry level' },
+  { label: 'Honeywell / Garmin', query: 'Honeywell Garmin engineer entry level Iowa Illinois Minnesota' },
+  // Manufacturing & Industrial (aerospace + defense industry)
+  { label: 'Manufacturing Engineer — Midwest', query: 'manufacturing engineer aerospace defense entry level Iowa Illinois Minnesota Wisconsin' },
+  { label: 'Industrial Engineer — Aerospace', query: 'industrial engineer aerospace defense manufacturing entry level' },
+  { label: 'NPI / Process Engineer', query: 'NPI process engineer new product introduction aerospace manufacturing entry level' },
+  { label: 'Lean / Continuous Improvement', query: 'lean manufacturing continuous improvement engineer aerospace defense entry level' },
+  { label: 'Manufacturing Eng — All US', query: 'manufacturing engineer aerospace defense entry level new grad' },
+  { label: 'Industrial Eng — All US', query: 'industrial engineer aerospace defense entry level new grad' },
+  { label: 'Production / Operations Eng', query: 'production engineer operations engineer aerospace manufacturing entry level' },
+  { label: 'Remote Eng — Aerospace / Mfg', query: 'aerospace manufacturing industrial engineer remote entry level new grad' },
 ];
 
 // Raw shape returned by JSearch API
